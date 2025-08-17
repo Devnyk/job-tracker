@@ -30,11 +30,31 @@ export default function Dashboard() {
     }
   };
 
+  // Add new job handler
+  const handleAddJob = (status) => {
+    const newJob = {
+      id: Date.now().toString(),
+      company: "New Company",
+      role: "New Role",
+      dateApplied: new Date().toLocaleDateString(),
+      logo: "https://via.placeholder.com/40",
+      status,
+    };
+
+    setJobs({
+      ...jobs,
+      [status]: [...jobs[status], newJob],
+    });
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6">
+      {/* Responsive grid layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 md:p-6 auto-rows-min">
         {Object.entries(jobs).map(([status, jobsList]) => (
-          <Column key={status} title={status} jobs={jobsList} />
+          <div key={status} className="flex flex-col">
+            <Column title={status} jobs={jobsList} onAddJob={handleAddJob} />
+          </div>
         ))}
       </div>
     </DragDropContext>
